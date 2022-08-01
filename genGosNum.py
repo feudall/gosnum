@@ -1,64 +1,90 @@
 import drawSvg as draw
-import string as st
-plate_text = 'K627PO190'
 
-plate_w = 520  # width
-plate_h = 112  # height
-th = 4  # thickness
+def work_piece_num(trans1=(0,0,0,0)):
 
-plate_pos, plate_reg_w = ([59, 88, 142, 196, 275, 329, 372, 2], 160)
-k_offset = {'K': 36, 'P': 252, 'O': 302}
 
-d = draw.Drawing(plate_w, plate_h, displayInline=False)  # создание полотна под номер
+    '''
+    здесь создаеться заготовка гос номера с регионом на 3 знака
+    :return: обьект draw
+    '''
 
-r = draw.Rectangle(0, 0, plate_w, plate_h, fill='#000000', rx=8, ry=8)  # заполнение черным цветом
-d.append(r)
 
-base_colour = '#ffffff'
-reg_colour = '#ffffff'
+    angle = f'skewX({trans1[0]}) skewY({trans1[1]}) rotate({trans1[2]} 0 0) scale({trans1[3]})'
+    base_colour = '#ffffff'
+    plate_w = 520  # width
+    plate_h = 112  # height
+    th = 4  # thickness
 
-r = draw.Rectangle(th, th, 360, plate_h - th * 2, fill=base_colour, rx=8, ry=8)  # вставка белая под основной номер
-d.append(r)
+    d = draw.Drawing(700, 700, displayInline=False, origin='center')  # создание полотна под номер
+    r = draw.Rectangle(-260, -56, plate_w, plate_h, fill='#000000', rx=8, ry=8, transform=angle)  # заполнение черным цветом
+    d.append(r)
+    r = draw.Rectangle(-260 + th, -56 + th, 360, plate_h - th * 2, fill=base_colour, rx=8, ry=8, transform=angle)  # вставка белая под основной номер
+    d.append(r)
 
-r = draw.Rectangle(366, th, 150, plate_h - th * 2, fill=base_colour, rx=8, ry=8)  # вставка белая под регион
-d.append(r)
-# How many simbols
-plate_len = 6
+    r = draw.Rectangle(107, -56 + th, 150, plate_h - th * 2, fill=base_colour, rx=8, ry=8, transform=angle)  # вставка белая под регион
+    d.append(r)
 
-# Draw text
-font_style = 'font-family:RoadNumbers'
-for i, s in enumerate(plate_text[:plate_len]):
-    if s.isdigit():
-        d.append(draw.Text(s, 119, plate_pos[i], 16, fill='black', style=font_style))  # Text
-    else:
-        d.append(draw.Text(s, 119, k_offset[s], 16, fill='black', style=font_style))  # Text
+    # Draw circle
+    d.append(draw.Circle(-240, 0, 4,
+                         fill='gray', stroke_width=1, stroke='black', transform=angle))
 
-# Text region
-font_style = f'letter-spacing:{plate_pos[plate_len + 1]}px;font-family:RoadNumbers'
-d.append(draw.Text(plate_text[plate_len:], 94, plate_pos[plate_len], 36, fill='black', style=font_style))
+    d.append(draw.Circle(240, 0, 4,
+                         fill='gray', stroke_width=1, stroke='black', transform=angle))
 
-# Draw flag
-flag_style = "stroke-width:0.4;stroke:rgb(0,0,0)"
-r = draw.Rectangle(465, 12, 38, 21, fill='#ffffff', style=flag_style)
-d.append(r)
+    # Draw flag
+    flag_style = "stroke-width:0.4;stroke:rgb(0,0,0)"
+    r = draw.Rectangle(205, -44, 38, 21, fill='#ffffff', style=flag_style, transform=angle)
+    d.append(r)
 
-flag_style = "stroke-width:0.4;stroke:rgb(0,0,0)"
-r = draw.Rectangle(465, 19, 38, 7, fill='#00f')
-d.append(r)
+    flag_style = "stroke-width:0.4;stroke:rgb(0,0,0)"
+    r = draw.Rectangle(205, -37, 38, 7, fill='#00f', transform=angle)
+    d.append(r)
 
-flag_style = "stroke-width:0.4;stroke:rgb(0,0,0)"
-r = draw.Rectangle(465, 12, 38, 7, fill='#f00')
-d.append(r)
+    flag_style = "stroke-width:0.4;stroke:rgb(0,0,0)"
+    r = draw.Rectangle(205, -44, 38, 7, fill='#f00', transform=angle)
+    d.append(r)
 
-# draw RUS
-font_style = 'font-style:normal;letter-spacing:2px;font-stretch:normal;font-family:Arial'
-d.append(draw.Text('RUS', 28, 400, 12, fill='black', style=font_style))
+    # draw RUS
+    font_style = 'font-style:normal;letter-spacing:2px;font-stretch:normal;font-family:Arial'
+    d.append(draw.Text('RUS', 28, 140, -44, fill='black', style=font_style, transform=angle))
+    return d
 
-# Draw circle
-d.append(draw.Circle(20, 56, 4,
-                     fill='gray', stroke_width=1, stroke='black'))
+def genGosNum(text, trans=(0,0,0,1)):
+    '''
+    отрисовка гос номера под разними углами символы из англ раскладки "abekmhopctyxd1234567890"
+    :param text: str гос номер также используеться в названии сохраняемого файла.
+    :param angl: str Y или X
+    :param val: int угл до + - 48% по оси Y и + - 60% по X
+    :return: None сохраняет в файл
+    '''
 
-d.append(draw.Circle(500, 56, 4,
-                     fill='gray', stroke_width=1, stroke='black'))
+    angle = f'skewX({trans[0]}) skewY({trans[1]}) rotate({trans[2]} 0 0) scale({trans[3]})'
+    setgud = set('abekmhopctyxd1234567890')
+    assert len(set(text).difference(
+        setgud)) == 0, 'Используйте разрешенные символы из англ раскладки "abekmhopctyxd1234567890"'
+    name_file = text.upper()
+    text = list(name_file)
+    d = work_piece_num(trans1=trans)
+    pos_text = [-230, -172, -118, -64, 5, 50, 115, 151, 192]
+    dict_num = dict(zip(pos_text, text))
+    # # Draw text
+    font_style = 'font-family:RoadNumbers'
+    for key, val in dict_num.items():
+        if val.isdigit():
+            if key in list(dict_num.keys())[6:]:
+                d.append(draw.Text(val, 94, key, -20, fill='black', style=font_style, transform=angle))
+                continue
+            d.append(draw.Text(val, 119, key, -40, fill='black', style=font_style, transform=angle))  # Text
+        else:
+            d.append(draw.Text(val, 119, key, -40, fill='black', style=font_style, transform=angle))  # Text
+    d.savePng(f'numgos/{trans}png')
 
-d.savePng('example1.png')
+q = []
+wer = [1,0.9,0.8,0.7,0.6,0.5,0.4,0.3,0.2,0.1]
+for i in range(-45,45):
+  for y in range(-45, 45):
+      for p in wer:
+          q.append((i,y,0,p))
+
+for t in q:
+  genGosNum(f'p031be150', trans=t)

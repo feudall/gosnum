@@ -51,10 +51,10 @@ def work_piece_num(angle='Y', val=0):
 
 def genGosNum(text, angl='Y', val=0):
     '''
-    отрисовка гос номера под разними углами
+    отрисовка гос номера под разними углами символы из англ раскладки "abekmhopctyxd1234567890"
     :param text: str гос номер также используеться в названии сохраняемого файла.
     :param angl: str Y или X
-    :param val: int угл до 50%
+    :param val: int угл до + - 48% по оси Y и + - 60% по X
     :return: None сохраняет в файл
     '''
 
@@ -79,4 +79,4 @@ def genGosNum(text, angl='Y', val=0):
             d.append(draw.Text(val, 119, key, -40, fill='black', style=font_style, transform=angle))  # Text
     d.savePng(f'numgos/{name_file}.png')
 
-genGosNum(f'p031be150', angl='Y', val=50)
+genGosNum(f'p031be150', angl='X', val=-63)
