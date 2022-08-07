@@ -1,21 +1,16 @@
 import drawSvg as draw
 
-def work_piece_num(angle='Y', val=0):
+def work_piece_num(skewX=0, skewY=0, rotate=0, scale=1):
 
-
-    '''
-    здесь создаеться заготовка гос номера с регионом на 3 знака
-    :return: обьект draw
-    '''
-
-
-    angle = f'skew{angle}({val})'
+    angle = f'skewX({skewX}) skewY({skewY}) rotate({rotate} 0 0) scale({scale})'
     base_colour = '#ffffff'
     plate_w = 520  # width
     plate_h = 112  # height
     th = 4  # thickness
 
     d = draw.Drawing(700, 700, displayInline=False, origin='center')  # создание полотна под номер
+    r = draw.Rectangle(0, 0, 700, 700, fill='	#282828', rx=8, ry=8, transform=angle)  # заполнение черным цветом
+    d.append(r)
     r = draw.Rectangle(-260, -56, plate_w, plate_h, fill='#000000', rx=8, ry=8, transform=angle)  # заполнение черным цветом
     d.append(r)
     r = draw.Rectangle(-260 + th, -56 + th, 360, plate_h - th * 2, fill=base_colour, rx=8, ry=8, transform=angle)  # вставка белая под основной номер
@@ -49,22 +44,18 @@ def work_piece_num(angle='Y', val=0):
     d.append(draw.Text('RUS', 28, 140, -44, fill='black', style=font_style, transform=angle))
     return d
 
-def genGosNum(text, angl='Y', val=0):
-    '''
-    отрисовка гос номера под разними углами символы из англ раскладки "abekmhopctyxd1234567890"
-    :param text: str гос номер также используеться в названии сохраняемого файла.
-    :param angl: str Y или X
-    :param val: int угл до + - 48% по оси Y и + - 60% по X
-    :return: None сохраняет в файл
-    '''
+def genGosNum(text='p031be150', skewX=0, skewY=0, rotate=0, scale=0, blackout=0):
 
-    angle = f'skew{angl}({val})'
+    plate_w = 520  # width
+    plate_h = 112  # height
+    th = 4  # thickness
+    angle = f'skewX({skewX}) skewY({skewY}) rotate({rotate} 0 0) scale({scale})'
     setgud = set('abekmhopctyxd1234567890')
     assert len(set(text).difference(
         setgud)) == 0, 'Используйте разрешенные символы из англ раскладки "abekmhopctyxd1234567890"'
     name_file = text.upper()
     text = list(name_file)
-    d = work_piece_num(angle=angl, val=val)
+    d = work_piece_num(skewX=skewX, skewY=skewY, rotate=rotate, scale=scale)
     pos_text = [-230, -172, -118, -64, 5, 50, 115, 151, 192]
     dict_num = dict(zip(pos_text, text))
     # # Draw text
@@ -77,6 +68,9 @@ def genGosNum(text, angl='Y', val=0):
             d.append(draw.Text(val, 119, key, -40, fill='black', style=font_style, transform=angle))  # Text
         else:
             d.append(draw.Text(val, 119, key, -40, fill='black', style=font_style, transform=angle))  # Text
-    d.savePng(f'numgos/{name_file}.png')
+    r = draw.Rectangle(-260, -56, plate_w, plate_h, fill='#000000', rx=8, ry=8, transform=angle, stroke='black', fill_opacity=blackout)  # заполнение черным цветом
+    d.append(r)
+    d.savePng(f'{"jgy"}.png')
+ # return d
 
-genGosNum(f'p031be150', angl='X', val=-63)
+genGosNum(f'p031be150', skewX=0, skewY=0, rotate=0, scale=0.5, blackout=0.92)

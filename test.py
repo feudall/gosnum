@@ -9,8 +9,10 @@ def work_piece_num(skewX=0, skewY=0, rotate=0, scale=1,regcount=True):
     th = 8  # thickness
 
     d = draw.Drawing(800, 800, displayInline=False)  # создание полотна под номер
-    # r = draw.Rectangle(0, 0, 800, 800, fill='	#282828', rx=8, ry=8)  # заполнение черным цветом
-    # d.append(r)
+    r = draw.Rectangle(0, 0, 800, 800, fill='	#282828', rx=8, ry=8,
+                       # transform=angle
+                       )  # заполнение черным цветом
+    d.append(r)
     r = draw.Rectangle(140, 344, plate_w, plate_h, fill='#000000', rx=8, ry=8, transform=angle)  # заполнение черным цветом
     d.append(r)
     if regcount:
@@ -109,7 +111,6 @@ def work_piece_num(skewX=0, skewY=0, rotate=0, scale=1,regcount=True):
 
 def genGosNum(text='p031be150', skewX=0, skewY=0, rotate=0, scale=0, blackout=0,regcount=True):
 
-    name = text
     plate_w = 520  # width  1120
     plate_h = 112  # height
     th = 4  # thickness
@@ -124,7 +125,7 @@ def genGosNum(text='p031be150', skewX=0, skewY=0, rotate=0, scale=0, blackout=0,
                        rotate=rotate,
                        scale=scale,
                        regcount=regcount)
-    pos_text = [170, 228, 280, 332, 388, 444, 513, 554, 595]
+    pos_text = [170, 228, 280, 332, 388, 444, 512, 553, 594]
     dict_num = dict(zip(pos_text, text))
     pos_text1 = [174, 236, 292, 348, 408, 464, 547, 591]
     dict_num1 = dict(zip(pos_text1, text))
@@ -207,9 +208,7 @@ def genGosNum(text='p031be150', skewX=0, skewY=0, rotate=0, scale=0, blackout=0,
                            stroke='black',
                            fill_opacity=blackout)  # заполнение черным цветом
         d.append(r)
-    d.savePng(f'tmp/{name}.png')
+    d.savePng('example.png')
     return d
 
-if __name__ == "__main__":
-
-    genGosNum(f'h111eb100', skewX=0, skewY=0, rotate=0, scale=1, blackout=0, regcount=False)
+genGosNum(f'h031be150', skewX=0, skewY=0, rotate=0, scale=0.5, blackout=0.5, regcount=False)
