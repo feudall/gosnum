@@ -114,9 +114,9 @@ def genGosNum(text='p031be150', skewX=0, skewY=0, rotate=0, scale=0, blackout=0,
     plate_h = 112  # height
     th = 4  # thickness
     angle = f'skewX({skewX}) skewY({skewY}) rotate({rotate} 0 0) scale({scale})'
-    setgud = set('abekmhopctyxd1234567890')
-    assert len(set(text).difference(
-        setgud)) == 0, 'Используйте разрешенные символы из англ раскладки "abekmhopctyxd1234567890"'
+    # setgud = set('ABEKMHOPCTYXD')
+    # assert len(set(text).difference(
+    #     setgud)) == 0, 'Используйте разрешенные символы из англ раскладки "abekmhopctyxd1234567890"'
     name_file = text.upper()
     text = list(name_file)
     d = work_piece_num(skewX=skewX,
