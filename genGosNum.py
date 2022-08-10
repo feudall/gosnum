@@ -107,7 +107,7 @@ def work_piece_num(skewX=0, skewY=0, rotate=0, scale=1,regcount=True):
                        transform=angle))
     return d
 
-def genGosNum(text='p031be150', skewX=0, skewY=0, rotate=0, scale=0, blackout=0,regcount=True):
+def genGosNum(text='p031be150', path='', skewX=0, skewY=0, rotate=0, scale=0, blackout=0,regcount=True):
 
     name = text
     plate_w = 520  # width  1120
@@ -207,8 +207,8 @@ def genGosNum(text='p031be150', skewX=0, skewY=0, rotate=0, scale=0, blackout=0,
                            stroke='black',
                            fill_opacity=blackout)  # заполнение черным цветом
         d.append(r)
-    d.savePng(f'tmp/{name}.png')
-    return d
+    d.savePng(f'{path}/{name}.png')
+    # return d
 
 if __name__ == "__main__":
 
