@@ -54,11 +54,17 @@ def random_render_num():
     images, cor = deformnum(img, slant=setg[2], transform=setg[3], scale=setg[1])
     images = noise(images, val=setg[4])
     images = img_as_ubyte(images)
-    imsave(f'{path_num_noise}/{text}:slant={setg[2]}:transform={setg[3]}:scale={setg[1]}:blackout={setg[0]}:cordinates={cor}:noise={setg[4]}.png', images)
+    print(cor)
+    # imsave(f'{path_num_noise}/{text}:slant={setg[2]}:transform={setg[3]}:scale={setg[1]}:blackout={setg[0]}:cordinates={cor}:noise={setg[4]}.png', images)
+    imsave(f'{path_num_noise}/{text}.png', images)
+    with open(f'tmp/annotations/{text}.txt', 'w') as f:
+        f.write(" ".join(map(str, cor)))
+
+
 
 
     # print(text)
 
-for i in range(6000):
+for i in range(1):
     random_render_num()
 

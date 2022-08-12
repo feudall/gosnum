@@ -186,15 +186,29 @@ def deformnum(img, slant=0, transform=0, scale=100):
     warped = cv2.warpPerspective(img, M, (w, h), flags=cv2.INTER_LINEAR)
     # cv2_imshow(warped)
     # cv2.destroyAllWindows()
-    coordinates = {}
-    for i in range(1, 5):
-        coordinates[f"x{i} y{i}"] = (dst[i - 1][0], dst[i - 1][1])
+    # coordinates = {}
+    # for i in range(1, 5):
+    #     coordinates[f"x{i} y{i}"] = (dst[i - 1][0], dst[i - 1][1])
+    lx = []
+    ly = []
+    for val in dst:
+        lx.append(val[0])
+        ly.append(val[1])
+    xmax = max(lx)
+    xmin = min(lx)
+    ymax = max(ly)
+    ymin = min(ly)           # [((420 + 98) / 2) / 640, ((462 + 345) / 2) / 480, 322 / 640, 117 / 480] 'равны' [0.4046875, 0.840625, 0.503125, 0.24375].
+    cor = [0, ((xmax + xmin) / 2) / 800, ((ymax + ymin) / 2) / 800, (xmax - xmin) / 800, (ymax - ymin) / 800]
+    # with open('tmp/annotations')
+    #     f.write(index + '\n')
 
-    return warped, coordinates
+
+
+    return warped, cor
 
 
 if __name__ == '__main__':
-    img = cv2.imread('tmp/h888be175.png')
+    img = cv2.imread('tmp/num/A002MT529.png')
     images, cor = deformnum(img, slant=30, transform=100, scale=100)
-    cv2.imwrite('deform.png', images)
+    # cv2.imwrite('deform.png', images)
     print(cor)
