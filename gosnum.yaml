@@ -1,0 +1,11 @@
+# данные train и val в виде 1) каталога: path/images/, 2) файла: path/images.txt , или 3) список: [путь 1/изображения/, путь 2/изображения/]
+# train and val data as 1) directory: path/images/, 2) file: path/images.txt, or 3) list: [path1/images/, path2/images/]
+train: ../input/gosnum/datanum/images/train/
+val: ../input/gosnum/datanum/images/val/
+test: ../input/gosnum/datanum/images/test/
+
+# number of classes
+nc: 1
+
+# class names
+names: ['gosnum']
